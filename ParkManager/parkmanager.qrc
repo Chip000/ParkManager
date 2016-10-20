@@ -1,0 +1,19 @@
+<RCC>
+  <qresource>
+    <file>icons/parkingbigp.png</file>
+    <file>icons/documentation.png</file>
+    <file>icons/backup.svg</file>
+    <file>icons/find.png</file>
+    <file>icons/calculator.svg</file>
+    <file>icons/closeall.png</file>
+    <file>icons/configure.png</file>
+    <file>icons/cascade.png</file>
+    <file>icons/paying.png</file>
+    <file>icons/tiled.png</file>
+    <file>icons/application-exit.png</file>
+    <file>icons/document-new.png</file>
+    <file>icons/document-print.png</file>
+    <file>icons/document-save.png</file>
+    <file>icons/parking.png</file>
+  </qresource>
+</RCC>
