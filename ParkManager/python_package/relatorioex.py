@@ -90,7 +90,7 @@ class RelatorioEx(QtWidgets.QWidget, Ui_Relatorio):
                                                 " Todos Arquivos (*.*)"))
         
         if not filename[0]:
-            QtWidgets.QMessageBox.critical(self, "Arquivo não criado.")
+            self.msgBox("Arquivo não criado.")
             return
 
         values = {'dini': self.ui.datainiDE.date().toString("yyyy-MM-dd"),
