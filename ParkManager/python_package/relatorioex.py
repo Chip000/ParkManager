@@ -42,6 +42,9 @@ class RelatorioEx(QtWidgets.QWidget, Ui_Relatorio):
     def on_fecharButton_clicked(self):
         self.csignal.signal.emit()
 
+    def closeEvent(self, event):
+        self.csignal.signal.emit()
+
     @QtCore.pyqtSlot(bool)
     def on_procurarButton_clicked(self):
         search = {'dini': self.ui.datainiDE.date().toString("yyyy-MM-dd"),

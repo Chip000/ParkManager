@@ -36,7 +36,7 @@ class EntradaEx(QtWidgets.QWidget, Ui_Entrada):
         self.timer.timeout.connect(self.showTime)
         self.timer.start(1000)
         self.showTime()
-        
+
         self.ui.placaLE.setFocus()
 
     def msgBox(self, text=None):
@@ -69,7 +69,10 @@ class EntradaEx(QtWidgets.QWidget, Ui_Entrada):
     @QtCore.pyqtSlot(bool)
     def on_fecharButton_clicked(self):
         self.csignal.signal.emit()
-        
+
+    def closeEvent(self, event):
+        self.csignal.signal.emit()
+
     @QtCore.pyqtSlot(bool)
     def on_modificarCkB_clicked(self, status):
         if status:

@@ -9,8 +9,11 @@ from datetime import datetime
 
 
 class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
-    searchquery = ("SELECT dia, hora, placa, marca, modelo, cor "
+    searchquery = ("SELECT id, dia, hora, placa, marca, modelo, cor "
                    "FROM entrada WHERE id = %(id)s")
+    searchqueryplaca = ("SELECT  id, dia, hora, placa, marca, modelo, cor "
+                        "FROM entrada WHERE placa = %(placa)s "
+                        "ORDER BY dia desc, hora desc")
     addquery = ("INSERT INTO pagto (ent_id, dia, hora, valor) "
                 "VALUES (%(ent_id)s, %(dia)s, %(hora)s, %(valor)s)")
     searchpgto = ("SELECT id FROM pagto WHERE ent_id = %(id)s")
@@ -43,6 +46,8 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         currency = QtGui.QDoubleValidator(parent=self.ui.recebidoLE)
         currency.setDecimals(2)
         self.ui.recebidoLE.setValidator(currency)
+
+        self.ui.placaLE.setReadOnly(False)
         
     def msgBox(self, text=None):
         msg = QtWidgets.QMessageBox()
@@ -75,6 +80,9 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
     def on_fecharButton_clicked(self):
         self.csignal.signal.emit()
 
+    def closeEvent(self, event):
+        self.csignal.signal.emit()
+
     @QtCore.pyqtSlot()
     def on_recebidoLE_editingFinished(self):
         try:
@@ -102,14 +110,12 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         if status:
             self.ui.dataEntradaLE.setReadOnly(False)
             self.ui.horaEntradaLE.setReadOnly(False)
-            self.ui.placaLE.setReadOnly(False)
             self.ui.marcaLE.setReadOnly(False)
             self.ui.modeloLE.setReadOnly(False)
             self.ui.corLE.setReadOnly(False)
         else:
             self.ui.dataEntradaLE.setReadOnly(True)
             self.ui.horaEntradaLE.setReadOnly(True)
-            self.ui.placaLE.setReadOnly(True)
             self.ui.marcaLE.setReadOnly(True)
             self.ui.modeloLE.setReadOnly(True)
             self.ui.corLE.setReadOnly(True)
@@ -137,12 +143,18 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
     def on_procurarButton_clicked(self):
         config = ConfigParser()
         config.read_file(open(self.cfgfile))
-        
+
+        searchbyno = True
         ent_id = self.ui.ticketEntradaLE.text()
         values = {'id': ent_id}
-        if not ent_id:
-            self.msgBox("Campo Ticket Entrada Vazio")
+        
+        values['placa'] = self.ui.placaLE.text()
+        if not values['placa'] and not ent_id:
+            self.msgBox("Campo Ticket Entrada e Placa Vazios.")
             return
+
+        if not ent_id:
+            searchbyno = False
         
         # busca no bd
         db = DB()
@@ -151,11 +163,16 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
             self.msgBox("Ticket já pago.")
             db.close()
             return
-        result = db.fetchone(self.searchquery, values)
+        if searchbyno:
+            result = db.fetchone(self.searchquery, values)
+        else:
+            result = db.fetchall(self.searchqueryplaca, values)[0]
+
         if not result:
             self.msgBox("Ticket não existente.")
             db.close()
             return
+            
         db.close()
 
         # retorno:
@@ -163,17 +180,19 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         # placa, marca, modelo e cor string
         
         # escrevendo nos campos
-        keys = ('dataEntrada', 'horaEntrada', 'placa', 'marca',
+        keys = ('id', 'dataEntrada', 'horaEntrada', 'placa', 'marca',
                 'modelo', 'cor')
         for k, v in zip(keys, result):
             values[k] = v
 
-        values['dataEntrada'] = result[0].strftime("%d/%m/%Y")
+        values['dataEntrada'] = result[1].strftime("%d/%m/%Y")
         self.ui.dataEntradaLE.setText(values['dataEntrada'])
 
-        values['horaEntrada'] = "{0:0>8}".format(str(result[1]))
+        values['horaEntrada'] = "{0:0>8}".format(str(result[2]))
         self.ui.horaEntradaLE.setText(values['horaEntrada'])
-        
+
+        if not searchbyno:
+            self.ui.ticketEntradaLE.setText(str(values['id']))
         self.ui.placaLE.setText(values['placa'])
         self.ui.marcaLE.setText(values['marca'])
         self.ui.modeloLE.setText(values['modelo'])
@@ -184,7 +203,7 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
                            self.ui.horaSaidaLE.text()))
         now = datetime.strptime(strsai, "%d/%m/%Y %H:%M:%S")
 
-        strent = " ".join((values['dataEntrada'], str(result[1])))
+        strent = " ".join((values['dataEntrada'], str(result[2])))
         ent = datetime.strptime(strent, "%d/%m/%Y %H:%M:%S")
 
         dt = now - ent

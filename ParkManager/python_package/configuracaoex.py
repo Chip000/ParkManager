@@ -58,6 +58,9 @@ class ConfiguracoesEx(QtWidgets.QWidget, Ui_Configuracoes):
     def on_fecharButton_clicked(self):
         self.csignal.signal.emit()
 
+    def closeEvent(self, event):
+        self.csignal.signal.emit()
+
     @QtCore.pyqtSlot(bool)
     def on_salvarButton_clicked(self):
         config = ConfigParser()
