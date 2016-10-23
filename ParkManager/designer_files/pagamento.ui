@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>674</height>
+    <height>516</height>
    </rect>
   </property>
   <property name="maximumSize">
@@ -41,37 +41,51 @@
      <property name="margin">
       <number>20</number>
      </property>
-     <item row="3" column="0">
-      <widget class="QLabel" name="valorLabel">
-       <property name="text">
-        <string>Valor:</string>
+     <item row="4" column="1" colspan="4">
+      <widget class="QLineEdit" name="marcaLE">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maxLength">
+        <number>20</number>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item row="3" column="4">
-      <widget class="QLabel" name="Troco">
-       <property name="maximumSize">
+     <item row="0" column="2">
+      <widget class="QLabel" name="placaLabel">
+       <property name="text">
+        <string>Placa:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLineEdit" name="placaLE">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
         <size>
-         <width>92</width>
-         <height>16777215</height>
+         <width>130</width>
+         <height>0</height>
         </size>
        </property>
-       <property name="text">
-        <string>Troco:</string>
+       <property name="maxLength">
+        <number>7</number>
        </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="dataSaidaLabel">
-       <property name="text">
-        <string>Data Saída:</string>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
        </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="dataEntradaLabel">
-       <property name="text">
-        <string>Data Entrada:</string>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -88,28 +102,21 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QLabel" name="horaEntradaLabel">
-       <property name="maximumSize">
-        <size>
-         <width>92</width>
-         <height>16777215</height>
-        </size>
-       </property>
+     <item row="3" column="0">
+      <widget class="QLabel" name="valorLabel">
        <property name="text">
-        <string>Hora Entrada:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QLabel" name="valorLabel_2">
-       <property name="text">
-        <string>Recebido:</string>
+        <string>Valor:</string>
        </property>
       </widget>
      </item>
      <item row="3" column="1">
       <widget class="QLineEdit" name="valorLE">
+       <property name="minimumSize">
+        <size>
+         <width>130</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="maximumSize">
         <size>
          <width>130</width>
@@ -127,16 +134,24 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="ticketEntradaLabel">
-       <property name="maximumSize">
-        <size>
-         <width>92</width>
-         <height>16777215</height>
-        </size>
-       </property>
+     <item row="2" column="0">
+      <widget class="QLabel" name="dataEntradaLabel">
        <property name="text">
-        <string>Ticket Entrada:</string>
+        <string>Data Entrada:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="0">
+      <widget class="QLabel" name="corLabel">
+       <property name="text">
+        <string>Cor:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="marcaLabel">
+       <property name="text">
+        <string>Marca:</string>
        </property>
       </widget>
      </item>
@@ -193,56 +208,79 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1" colspan="2">
-      <widget class="QLineEdit" name="placaLE">
+     <item row="3" column="2">
+      <widget class="QLabel" name="valorLabel_2">
+       <property name="text">
+        <string>Recebido:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="ticketEntradaLabel">
+       <property name="maximumSize">
+        <size>
+         <width>92</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Ticket Entrada:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="4">
+      <widget class="QLabel" name="Troco">
+       <property name="maximumSize">
+        <size>
+         <width>92</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Troco:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="dataSaidaLabel">
+       <property name="text">
+        <string>Data Saída:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1" colspan="4">
+      <widget class="QLineEdit" name="corLE">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>130</width>
-         <height>0</height>
-        </size>
-       </property>
        <property name="maxLength">
-        <number>7</number>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
+        <number>10</number>
        </property>
        <property name="readOnly">
         <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item row="6" column="0">
+     <item row="5" column="0">
       <widget class="QLabel" name="modeloLabel">
        <property name="text">
         <string>Modelo:</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="corLabel">
-       <property name="text">
-        <string>Cor:</string>
+     <item row="2" column="2">
+      <widget class="QLabel" name="horaEntradaLabel">
+       <property name="maximumSize">
+        <size>
+         <width>92</width>
+         <height>16777215</height>
+        </size>
        </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="marcaLabel">
        <property name="text">
-        <string>Marca:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="placaLabel">
-       <property name="text">
-        <string>Placa:</string>
+        <string>Hora Entrada:</string>
        </property>
       </widget>
      </item>
@@ -362,72 +400,6 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="1" colspan="5">
-      <widget class="QLineEdit" name="marcaLE">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>655</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maxLength">
-        <number>20</number>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1" colspan="5">
-      <widget class="QLineEdit" name="modeloLE">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>655</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maxLength">
-        <number>20</number>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1" colspan="5">
-      <widget class="QLineEdit" name="corLE">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>655</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maxLength">
-        <number>10</number>
-       </property>
-       <property name="readOnly">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="4">
       <widget class="QCheckBox" name="modificarCkB">
        <property name="maximumSize">
@@ -438,27 +410,6 @@
        </property>
        <property name="text">
         <string>Modificar</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="2">
-      <widget class="QPushButton" name="procurarButton">
-       <property name="text">
-        <string>Pr&amp;ocurar</string>
-       </property>
-       <property name="icon">
-        <iconset resource="../parkmanager.qrc">
-         <normaloff>:/icons/find.png</normaloff>:/icons/find.png</iconset>
-       </property>
-       <property name="shortcut">
-        <string>F4</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="4">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Permanência:</string>
        </property>
       </widget>
      </item>
@@ -481,10 +432,47 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="4">
+     <item row="2" column="4">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Permanência:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="5">
       <widget class="QCheckBox" name="entModCkB">
        <property name="text">
         <string>Modificar</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1" colspan="4">
+      <widget class="QLineEdit" name="modeloLE">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maxLength">
+        <number>20</number>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <widget class="QPushButton" name="procurarButton">
+       <property name="text">
+        <string>Pr&amp;ocurar</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../parkmanager.qrc">
+         <normaloff>:/icons/find.png</normaloff>:/icons/find.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>F4</string>
        </property>
       </widget>
      </item>
@@ -499,13 +487,13 @@
       <number>20</number>
      </property>
      <property name="topMargin">
-      <number>6</number>
+      <number>0</number>
      </property>
      <property name="rightMargin">
       <number>20</number>
      </property>
      <property name="bottomMargin">
-      <number>6</number>
+      <number>0</number>
      </property>
      <item>
       <widget class="QPushButton" name="calcularButton">
@@ -571,6 +559,7 @@
  </widget>
  <tabstops>
   <tabstop>ticketEntradaLE</tabstop>
+  <tabstop>placaLE</tabstop>
   <tabstop>procurarButton</tabstop>
   <tabstop>dataSaidaLE</tabstop>
   <tabstop>horaSaidaLE</tabstop>
@@ -578,11 +567,11 @@
   <tabstop>dataEntradaLE</tabstop>
   <tabstop>horaEntradaLE</tabstop>
   <tabstop>recebidoLE</tabstop>
-  <tabstop>placaLE</tabstop>
-  <tabstop>entModCkB</tabstop>
   <tabstop>marcaLE</tabstop>
   <tabstop>modeloLE</tabstop>
   <tabstop>corLE</tabstop>
+  <tabstop>entModCkB</tabstop>
+  <tabstop>calcularButton</tabstop>
   <tabstop>novoButton</tabstop>
   <tabstop>imprimirButton</tabstop>
   <tabstop>fecharButton</tabstop>
