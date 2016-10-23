@@ -158,18 +158,24 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         
         # busca no bd
         db = DB()
-        result = db.fetchone(self.searchpgto, values)
-        if result:
-            self.msgBox("Ticket já pago.")
-            db.close()
-            return
         if searchbyno:
             result = db.fetchone(self.searchquery, values)
         else:
             result = db.fetchall(self.searchqueryplaca, values)[0]
-
         if not result:
             self.msgBox("Ticket não existente.")
+            db.close()
+            return
+
+        payed = {}
+        if searchbyno:
+            payed['id'] = ent_id
+        else:
+            payed['id'] = result[0]
+
+        result_pagto = db.fetchone(self.searchpgto, payed)
+        if result_pagto:
+            self.msgBox("Ticket já pago.")
             db.close()
             return
             
