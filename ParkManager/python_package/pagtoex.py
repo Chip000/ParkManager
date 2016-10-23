@@ -230,6 +230,7 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
             else:
                 valor += float(config['Valores']['hora'])
 
+        self.timer.stop()
         self.ui.valorLE.setText("{:.2f}".format(valor))
 
     @QtCore.pyqtSlot(bool)
