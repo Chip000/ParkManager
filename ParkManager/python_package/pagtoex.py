@@ -11,12 +11,18 @@ from datetime import datetime
 class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
     searchquery = ("SELECT id, dia, hora, placa, marca, modelo, cor "
                    "FROM entrada WHERE id = %(id)s")
-    searchqueryplaca = ("SELECT  id, dia, hora, placa, marca, modelo, cor "
+    searchqueryplaca = ("SELECT id, dia, hora, placa, marca, modelo, cor "
                         "FROM entrada WHERE placa = %(placa)s "
                         "ORDER BY dia desc, hora desc")
-    addquery = ("INSERT INTO pagto (ent_id, dia, hora, valor) "
-                "VALUES (%(ent_id)s, %(dia)s, %(hora)s, %(valor)s)")
+    addquery = ("INSERT INTO pagto"
+                " (ent_id, dia, hora, permanencia, valor, recebido, troco) "
+                "VALUES (%(ent_id)s, %(dia)s, %(hora)s, %(permanencia)s,"
+                " %(valor)s, %(recebido)s, %(troco)s)")
     searchpgto = ("SELECT id FROM pagto WHERE ent_id = %(id)s")
+    searchpgtofull = ("SELECT"
+                      " id, ent_id, dia, hora, permanencia,"
+                      " valor, recebido, troco "
+                      "FROM pagto WHERE ent_id = %(id)s")
     
     def __init__(self, parent=None, csignal=None, cfgfile=None,
                  printer=None):
@@ -166,19 +172,6 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
             self.msgBox("Ticket não existente.")
             db.close()
             return
-
-        payed = {}
-        if searchbyno:
-            payed['id'] = ent_id
-        else:
-            payed['id'] = result[0]
-
-        result_pagto = db.fetchone(self.searchpgto, payed)
-        if result_pagto:
-            self.msgBox("Ticket já pago.")
-            db.close()
-            return
-            
         db.close()
 
         # retorno:
@@ -204,6 +197,33 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         self.ui.modeloLE.setText(values['modelo'])
         self.ui.corLE.setText(values['cor'])
 
+        # Se já foi pago
+        payed = {}
+        if searchbyno:
+            payed['id'] = ent_id
+        else:
+            payed['id'] = result[0]
+
+        db = DB()
+        result_pagto = db.fetchone(self.searchpgto, payed)
+        if result_pagto:
+            self.msgBox("Ticket já pago.")
+            r = db.fetchone(self.searchpgtofull, payed)
+            tsec = int(r[4].total_seconds())
+
+            dth = tsec // 3600
+            dtm = (tsec // 60) % 60
+            tempo_est = "{:0>2}:{:0>2}".format(dth, dtm)
+            
+            self.ui.permanenciaLE.setText(tempo_est)
+            self.ui.valorLE.setText(str(r[5]))
+            self.ui.recebidoLE.setText(str(r[6]))
+            self.ui.trocoLE.setText(str(r[7]))
+            db.close()
+            return
+        db.close()
+
+        # Caso não foi pago
         # gerando o valor da estadia 30m 1h 8h
         strsai = " ".join((self.ui.dataSaidaLE.text(),
                            self.ui.horaSaidaLE.text()))
@@ -258,7 +278,10 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         values = {'ent_id': self.ui.ticketEntradaLE.text(),
                   'dia': dataSaida.toString("yyyy-MM-dd"),
                   'hora': self.ui.horaSaidaLE.text(),
-                  'valor': self.ui.valorLE.text()}
+                  'permanencia': self.ui.permanenciaLE.text(),
+                  'valor': self.ui.valorLE.text(),
+                  'recebido': self.ui.recebidoLE.text(),
+                  'troco': self.ui.trocoLE.text()}
 
         others = {'Recebido': self.ui.recebidoLE.text(),
                   'Troco': self.ui.trocoLE.text(),
@@ -290,10 +313,8 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         result = db.fetchone(self.searchpgto, search)
         if result:
             self.msgBox("Ticket já pago.")
-            db.close()
-            return
-
-        others['Ticket Saída'] = db.insert(self.addquery, values)
+        else:
+            others['Ticket Saída'] = db.insert(self.addquery, values)
         db.close()
 
         # Imprimindo comprovante

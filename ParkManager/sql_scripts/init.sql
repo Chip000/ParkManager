@@ -1,5 +1,5 @@
 CREATE USER IF NOT EXISTS 'parkmanagerpy'@'localhost'
-	   IDENTIFIED BY '# Inserir password';
+	   IDENTIFIED BY '# password';
 CREATE DATABASE IF NOT EXISTS parkmanagerdb;
 GRANT ALL PRIVILEGES ON parkmanagerdb.* TO 'parkmanagerpy'@'localhost';
 REVOKE CREATE ON parkmanagerdb.* FROM 'parkmanagerpy'@'localhost';
@@ -26,7 +26,10 @@ CREATE TABLE IF NOT EXISTS pagto (
 	   ent_id int(10) NOT NULL,
 	   dia date NOT NULL,
 	   hora time NOT NULL,
+	   permanencia time NOT NULL,
 	   valor decimal(11, 2) NOT NULL,
+	   recebido decimal(11, 2) NOT NULL,
+	   troco decimal(11, 2) NOT NULL,
 	   CONSTRAINT `fk_entrada_pagto`
 		FOREIGN KEY (ent_id) REFERENCES entrada (id)
 		ON DELETE CASCADE
