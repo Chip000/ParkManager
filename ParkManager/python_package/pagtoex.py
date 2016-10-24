@@ -245,9 +245,9 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
             valor = float(config['Valores']['diaria'])
         else:
             valor = dth * float(config['Valores']['hora'])
-            if dtm <= 30:
+            if dtm <= 30 and dtm > 0:
                 valor += float(config['Valores']['meia'])
-            else:
+            elif dtm <= 60 and dtm > 30:
                 valor += float(config['Valores']['hora'])
 
         self.timer.stop()
@@ -313,8 +313,9 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         result = db.fetchone(self.searchpgto, search)
         if result:
             self.msgBox("Ticket já pago.")
+            others['Ticket Saida'] = result[0]
         else:
-            others['Ticket Saída'] = db.insert(self.addquery, values)
+            others['Ticket Saida'] = db.insert(self.addquery, values)
         db.close()
 
         # Imprimindo comprovante
@@ -330,7 +331,7 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
 
         # No. ticket
         ptr.writeln("")
-        line = "Ticket Saida : {0:0>10}".format(others['Ticket Saída'])
+        line = "Ticket Saida : {0:0>10}".format(others['Ticket Saida'])
         ptr.writelncenter(line)
         line = "Ticket Entrada : {0:0>10}".format(values['ent_id'])
         ptr.writelncenter(line)

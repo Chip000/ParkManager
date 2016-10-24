@@ -11,6 +11,9 @@ class EntradaEx(QtWidgets.QWidget, Ui_Entrada):
     addquery = ("INSERT INTO entrada (dia, hora, placa, marca, modelo, cor) "
                 "VALUES (%(dia)s, %(hora)s, %(placa)s,"
                 " %(marca)s, %(modelo)s, %(cor)s)")
+    searchquery = ("SELECT pagto.id, pagto.ent_id, entrada.placa "
+                   "FROM pagto, entrada WHERE entrada.placa = %(placa)s "
+                   "AND pagto.id = entrada.id")
 
     def __init__(self, parent=None, csignal=None, cfgfile=None,
                  printer=None):
@@ -132,7 +135,11 @@ class EntradaEx(QtWidgets.QWidget, Ui_Entrada):
         
         # commit no bd
         db = DB()
-        values['ticket'] = db.insert(self.addquery, values)
+        res = db.fetchone(self.searchquery, values)
+        if not res:
+            values['ticket'] = db.insert(self.addquery, values)
+        else:
+            values['ticket'] = res[1]
         db.close()
 
         # imprimir
