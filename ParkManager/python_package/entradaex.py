@@ -11,9 +11,10 @@ class EntradaEx(QtWidgets.QWidget, Ui_Entrada):
     addquery = ("INSERT INTO entrada (dia, hora, placa, marca, modelo, cor) "
                 "VALUES (%(dia)s, %(hora)s, %(placa)s,"
                 " %(marca)s, %(modelo)s, %(cor)s)")
-    searchquery = ("SELECT pagto.id, pagto.ent_id, entrada.placa "
-                   "FROM pagto, entrada WHERE entrada.placa = %(placa)s "
-                   "AND pagto.id = entrada.id")
+    searchquery = ("SELECT id, dia, hora, placa, marca, modelo, cor "
+                   "FROM entrada WHERE placa = %(placa)s "
+                   "AND dia = %(dia)s "
+                   "AND hora = %(hora)s")
 
     def __init__(self, parent=None, csignal=None, cfgfile=None,
                  printer=None):
@@ -107,6 +108,9 @@ class EntradaEx(QtWidgets.QWidget, Ui_Entrada):
     @QtCore.pyqtSlot(bool)
     def on_imprimirButton_clicked(self):
         # dia formato dia/mes/ano para ano-mes-dia
+        self.timerdate.stop()
+        self.timer.stop()
+        
         dia = QtCore.QDate.fromString(self.ui.diaLE.text(), "dd/MM/yyyy")
         
         values = {'dia': dia.toString("yyyy-MM-dd"),
@@ -139,7 +143,13 @@ class EntradaEx(QtWidgets.QWidget, Ui_Entrada):
         if not res:
             values['ticket'] = db.insert(self.addquery, values)
         else:
-            values['ticket'] = res[1]
+            values['ticket'] = res[0]
+            values['marca'] = res[3]
+            values['modelo'] = res[4]
+            values['cor'] = res[5]
+            self.ui.marcaLE.setText(values['marca'])
+            self.ui.modeloLE.setText(values['modelo'])
+            self.ui.corLE.setText(values['cor'])
         db.close()
 
         # imprimir
