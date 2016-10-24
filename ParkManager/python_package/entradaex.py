@@ -144,9 +144,9 @@ class EntradaEx(QtWidgets.QWidget, Ui_Entrada):
             values['ticket'] = db.insert(self.addquery, values)
         else:
             values['ticket'] = res[0]
-            values['marca'] = res[3]
-            values['modelo'] = res[4]
-            values['cor'] = res[5]
+            values['marca'] = res[4]
+            values['modelo'] = res[5]
+            values['cor'] = res[6]
             self.ui.marcaLE.setText(values['marca'])
             self.ui.modeloLE.setText(values['modelo'])
             self.ui.corLE.setText(values['cor'])
