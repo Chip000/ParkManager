@@ -209,6 +209,12 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         if result_pagto:
             self.msgBox("Ticket já pago.")
             r = db.fetchone(self.searchpgtofull, payed)
+
+            self.ui.dataSaidaLE.setText(r[2].strftime("%d/%m/%Y"))
+            self.timerdate.stop()
+            self.ui.horaSaidaLE.setText("{0:0>8}".format(str(r[3])))
+            self.timer.stop()
+            
             tsec = int(r[4].total_seconds())
 
             dth = tsec // 3600
