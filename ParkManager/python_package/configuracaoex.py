@@ -40,7 +40,7 @@ class ConfiguracoesEx(QtWidgets.QWidget, Ui_Configuracoes):
             self.ui.maxVagasLE.setText(config['Valores']['vagas'])
             self.ui.meiaLE.setText(config['Valores']['meia'])
             self.ui.horaLE.setText(config['Valores']['hora'])
-            self.ui.diariaLE.setText(config['Valores']['diaria'])
+            self.ui.demaisLE.setText(config['Valores']['demais'])
         except KeyError as err:
             if err.args[0] != "Valores":
                 self.msgBox(u"Seção 'Valores' incompleta.")
@@ -81,7 +81,7 @@ class ConfiguracoesEx(QtWidgets.QWidget, Ui_Configuracoes):
             config['Valores'] = {'vagas': form.maxVagasLE.text(),
                                  'meia': form.meiaLE.text(),
                                  'hora': form.horaLE.text(),
-                                 'diaria': form.diariaLE.text()}
+                                 'demais': form.demaisLE.text()}
 
         # Salvando as configurações no arquivo
         with open(self.cfgfile, 'w') as cfile:

@@ -230,7 +230,7 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         db.close()
 
         # Caso não foi pago
-        # gerando o valor da estadia 30m 1h 8h
+        # transforma datetime em H:M:S
         strsai = " ".join((self.ui.dataSaidaLE.text(),
                            self.ui.horaSaidaLE.text()))
         now = datetime.strptime(strsai, "%d/%m/%Y %H:%M:%S")
@@ -245,16 +245,31 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         dtm = (tsec // 60) % 60
         tempo_est = "{:0>2}:{:0>2}".format(dth, dtm)
 
+        # Gera o valor da estadia
         valor = 0
         self.ui.permanenciaLE.setText(tempo_est)
-        if dth >= 8:
-            valor = float(config['Valores']['diaria'])
+        if dth == 0:
+            if dtm >= 0 and dtm <= 30:
+                # caso ficou meia hora
+                valor = float(config['Valores']['meia'])
+            elif dtm > 30 and dtm < 60:
+                # caso ficou uma hora
+                valor = float(config['Valores']['hora'])
         else:
-            valor = dth * float(config['Valores']['hora'])
-            if dtm <= 30 and dtm > 0:
-                valor += float(config['Valores']['meia'])
-            elif dtm <= 60 and dtm > 30:
-                valor += float(config['Valores']['hora'])
+            # caso ficou mais de uma hora
+            valor = float(config['Valores']['hora'])
+            valor += (dth - 1) * float(config['Valores']['demais'])
+            if dtm > 0:
+                valor += float(config['Valores']['demais'])
+
+        # if dth >= 8:
+        #     valor = float(config['Valores']['diaria'])
+        # else:
+        #     valor = dth * float(config['Valores']['hora'])
+        #     if dtm <= 30 and dtm > 0:
+        #         valor += float(config['Valores']['meia'])
+        #     elif dtm <= 60 and dtm > 30:
+        #         valor += float(config['Valores']['hora'])
 
         self.timer.stop()
         self.ui.valorLE.setText("{:.2f}".format(valor))

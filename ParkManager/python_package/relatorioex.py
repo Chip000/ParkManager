@@ -60,13 +60,15 @@ class RelatorioEx(QtWidgets.QWidget, Ui_Relatorio):
         
         values = {}
         for r in res:
-            date = r[0].strftime("%d/%m/%Y")
+            date = r[0].strftime("%Y%m%d")
             values[date] = {'qtd': 0,
-                            'valor': 0}
+                            'valor': 0,
+                            'dia': r[0].strftime("%d/%m/%Y")}
         values['Total'] = {'qtd': 0,
-                           'valor': 0}
+                           'valor': 0,
+                           'dia': 'Total'}
         for r in res:
-            date = r[0].strftime("%d/%m/%Y")
+            date = r[0].strftime("%Y%m%d")
             values[date]['qtd'] += 1
             values[date]['valor'] += r[1]
             values['Total']['qtd'] += 1
@@ -76,7 +78,7 @@ class RelatorioEx(QtWidgets.QWidget, Ui_Relatorio):
         row_keys = ['qtd', 'valor']
         self.ui.resTable.setRowCount(len(keys))
         for i, row in enumerate(keys):
-            cel = QtWidgets.QTableWidgetItem(row)
+            cel = QtWidgets.QTableWidgetItem(values[row]['dia'])
             self.ui.resTable.setItem(i, 0, cel)
             for j, col in enumerate(row_keys, start=1):
                 cel = QtWidgets.QTableWidgetItem(str(values[row][col]))
