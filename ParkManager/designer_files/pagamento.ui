@@ -441,6 +441,9 @@
      </item>
      <item row="4" column="5">
       <widget class="QCheckBox" name="entModCkB">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Modificar</string>
        </property>
@@ -473,6 +476,13 @@
        </property>
        <property name="shortcut">
         <string>F4</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="5">
+      <widget class="QCheckBox" name="diariaCkB">
+       <property name="text">
+        <string>Diária</string>
        </property>
       </widget>
      </item>
@@ -564,6 +574,7 @@
   <tabstop>dataSaidaLE</tabstop>
   <tabstop>horaSaidaLE</tabstop>
   <tabstop>modificarCkB</tabstop>
+  <tabstop>diariaCkB</tabstop>
   <tabstop>dataEntradaLE</tabstop>
   <tabstop>horaEntradaLE</tabstop>
   <tabstop>recebidoLE</tabstop>

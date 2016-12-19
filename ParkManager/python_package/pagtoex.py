@@ -54,6 +54,7 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         self.ui.recebidoLE.setValidator(currency)
 
         self.ui.placaLE.setReadOnly(False)
+        self.ui.diariaCkB.setCheckState(QtCore.Qt.Unchecked)
         
     def msgBox(self, text=None):
         msg = QtWidgets.QMessageBox()
@@ -111,21 +112,21 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
             self.ui.horaSaidaLE.setReadOnly(True)
             self.timer.start(1000)
 
-    @QtCore.pyqtSlot(bool)
-    def on_entModCkB_clicked(self, status):
-        if status:
-            self.ui.dataEntradaLE.setReadOnly(False)
-            self.ui.horaEntradaLE.setReadOnly(False)
-            self.ui.marcaLE.setReadOnly(False)
-            self.ui.modeloLE.setReadOnly(False)
-            self.ui.corLE.setReadOnly(False)
-        else:
-            self.ui.dataEntradaLE.setReadOnly(True)
-            self.ui.horaEntradaLE.setReadOnly(True)
-            self.ui.marcaLE.setReadOnly(True)
-            self.ui.modeloLE.setReadOnly(True)
-            self.ui.corLE.setReadOnly(True)
-
+#    @QtCore.pyqtSlot(bool)
+#    def on_entModCkB_clicked(self, status):
+#        if status:
+#            self.ui.dataEntradaLE.setReadOnly(False)
+#            self.ui.horaEntradaLE.setReadOnly(False)
+#            self.ui.marcaLE.setReadOnly(False)
+#            self.ui.modeloLE.setReadOnly(False)
+#            self.ui.corLE.setReadOnly(False)
+#        else:
+#            self.ui.dataEntradaLE.setReadOnly(True)
+#            self.ui.horaEntradaLE.setReadOnly(True)
+#            self.ui.marcaLE.setReadOnly(True)
+#            self.ui.modeloLE.setReadOnly(True)
+#            self.ui.corLE.setReadOnly(True)
+#
     @QtCore.pyqtSlot(bool)
     def on_novoButton_clicked(self):
         self.ui.ticketEntradaLE.clear()
@@ -135,16 +136,66 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         self.ui.horaEntradaLE.clear()
         self.ui.valorLE.clear()
         self.ui.recebidoLE.clear()
+        self.ui.permanenciaLE.clear()
         self.ui.trocoLE.clear()
         self.ui.placaLE.clear()
         self.ui.marcaLE.clear()
         self.ui.modeloLE.clear()
         self.ui.corLE.clear()
         self.ui.modificarCkB.setCheckState(QtCore.Qt.Unchecked)
+        self.ui.entModCkB.setCheckState(QtCore.Qt.Unchecked)
+        self.ui.diariaCkB.setCheckState(QtCore.Qt.Unchecked)
         self.showDate()
         self.showTime()
         self.timer.start(1000)
 
+    def calcularValor(self, config, values, horaEntrada):
+        # Caso não foi pago
+        # transforma datetime em H:M:S
+        strsai = " ".join((self.ui.dataSaidaLE.text(),
+                           self.ui.horaSaidaLE.text()))
+        now = datetime.strptime(strsai, "%d/%m/%Y %H:%M:%S")
+
+        strent = " ".join((values['dataEntrada'], str(horaEntrada)))
+        ent = datetime.strptime(strent, "%d/%m/%Y %H:%M:%S")
+
+        dt = now - ent
+        tsec = int(dt.total_seconds())
+
+        dth = tsec // 3600
+        dtm = (tsec // 60) % 60
+        tempo_est = "{:0>2}:{:0>2}".format(dth, dtm)
+
+        # Gera o valor da estadia
+        if self.ui.diariaCkB.isChecked():
+            valor = float(config['Valores']['diaria'])
+        else:
+            valor = 0
+            self.ui.permanenciaLE.setText(tempo_est)
+            if dth == 0:
+                if dtm >= 0 and dtm <= 30:
+                    # caso ficou meia hora
+                    valor = float(config['Valores']['meia'])
+                elif dtm > 30 and dtm < 60:
+                    # caso ficou uma hora
+                    valor = float(config['Valores']['hora'])
+            else:
+                # caso ficou mais de uma hora
+                valor = float(config['Valores']['hora'])
+                valor += (dth - 1) * float(config['Valores']['demais'])
+                if dtm > 0:
+                    valor += float(config['Valores']['demais'])
+
+        # if dth >= 8:
+        #     valor = float(config['Valores']['diaria'])
+        # else:
+        #     valor = dth * float(config['Valores']['hora'])
+        #     if dtm <= 30 and dtm > 0:
+        #         valor += float(config['Valores']['meia'])
+        #     elif dtm <= 60 and dtm > 30:
+        #         valor += float(config['Valores']['hora'])
+        return valor
+    
     @QtCore.pyqtSlot(bool)
     def on_procurarButton_clicked(self):
         config = ConfigParser()
@@ -229,47 +280,7 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
             return
         db.close()
 
-        # Caso não foi pago
-        # transforma datetime em H:M:S
-        strsai = " ".join((self.ui.dataSaidaLE.text(),
-                           self.ui.horaSaidaLE.text()))
-        now = datetime.strptime(strsai, "%d/%m/%Y %H:%M:%S")
-
-        strent = " ".join((values['dataEntrada'], str(result[2])))
-        ent = datetime.strptime(strent, "%d/%m/%Y %H:%M:%S")
-
-        dt = now - ent
-        tsec = int(dt.total_seconds())
-
-        dth = tsec // 3600
-        dtm = (tsec // 60) % 60
-        tempo_est = "{:0>2}:{:0>2}".format(dth, dtm)
-
-        # Gera o valor da estadia
-        valor = 0
-        self.ui.permanenciaLE.setText(tempo_est)
-        if dth == 0:
-            if dtm >= 0 and dtm <= 30:
-                # caso ficou meia hora
-                valor = float(config['Valores']['meia'])
-            elif dtm > 30 and dtm < 60:
-                # caso ficou uma hora
-                valor = float(config['Valores']['hora'])
-        else:
-            # caso ficou mais de uma hora
-            valor = float(config['Valores']['hora'])
-            valor += (dth - 1) * float(config['Valores']['demais'])
-            if dtm > 0:
-                valor += float(config['Valores']['demais'])
-
-        # if dth >= 8:
-        #     valor = float(config['Valores']['diaria'])
-        # else:
-        #     valor = dth * float(config['Valores']['hora'])
-        #     if dtm <= 30 and dtm > 0:
-        #         valor += float(config['Valores']['meia'])
-        #     elif dtm <= 60 and dtm > 30:
-        #         valor += float(config['Valores']['hora'])
+        valor = self.calcularValor(config, values, result[2])
 
         self.timer.stop()
         self.ui.valorLE.setText("{:.2f}".format(valor))

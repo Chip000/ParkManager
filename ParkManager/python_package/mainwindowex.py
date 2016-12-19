@@ -7,6 +7,7 @@ from .relatorioex import RelatorioEx
 from .communicate import Communicate
 from .db import DB
 from .printer import Printer
+from .dummyprinter import DummyPrinter
 from configparser import ConfigParser, NoSectionError
 from PyQt5 import QtWidgets, QtCore
 import os
@@ -24,15 +25,20 @@ class MainWindowEx(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ui.mdiArea.setViewMode(QtWidgets.QMdiArea.SubWindowView)
         self.setCentralWidget(self.ui.mdiArea)
 
+        self.debug = True
         # Impressora
         try:
             self.printer = Printer()
         except ValueError:
-            QtWidgets.QMessageBox.critical(self, "Sem Impressora.",
-                                           ("Impressora não encontrada. "
-                                            "Verifique a conexão e "
-                                            "inicie novamente"))
-            raise
+            if not self.debug:
+                QtWidgets.QMessageBox.critical(self, "Sem Impressora.",
+                                               ("Impressora não "
+                                                "encontrada. "
+                                                "Verifique a conexão e "
+                                                "inicie novamente"))
+                raise
+            else:
+                self.printer = DummyPrinter()
 
         # Controle para abertura de uma janela
         self.entr = False
