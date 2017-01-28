@@ -54,7 +54,10 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         self.ui.recebidoLE.setValidator(currency)
 
         self.ui.placaLE.setReadOnly(False)
-        self.ui.diariaCkB.setCheckState(QtCore.Qt.Unchecked)
+        self.ui.avulsoRB.setChecked(True)
+        self.ui.avulsoRB.clicked.connect(self.tipoBB_changed)
+        self.ui.diariaRB.clicked.connect(self.tipoBB_changed)
+        self.ui.mensalRB.clicked.connect(self.tipoBB_changed)
         
     def msgBox(self, text=None):
         msg = QtWidgets.QMessageBox()
@@ -144,11 +147,17 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         self.ui.corLE.clear()
         self.ui.modificarCkB.setCheckState(QtCore.Qt.Unchecked)
         self.ui.entModCkB.setCheckState(QtCore.Qt.Unchecked)
-        self.ui.diariaCkB.setCheckState(QtCore.Qt.Unchecked)
+        self.ui.avulsoRB.setChecked(True)
         self.showDate()
         self.showTime()
         self.timer.start(1000)
 
+    def tipoBB_changed(self):
+        if not self.ui.placaLE.text() and \
+           not self.ui.ticketEntradaLE.text():
+            return
+        self.on_procurarButton_clicked()
+        
     def calcularValor(self, config, values, horaEntrada):
         # Caso não foi pago
         # transforma datetime em H:M:S
@@ -167,8 +176,10 @@ class PagtoEx(QtWidgets.QWidget, Ui_Pagto):
         tempo_est = "{:0>2}:{:0>2}".format(dth, dtm)
 
         # Gera o valor da estadia
-        if self.ui.diariaCkB.isChecked():
+        if self.ui.diariaRB.isChecked():
             valor = float(config['Valores']['diaria'])
+        elif self.ui.mensalRB.isChecked():
+            valor = float(config['Valores']['mensal'])
         else:
             valor = 0
             self.ui.permanenciaLE.setText(tempo_est)

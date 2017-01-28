@@ -197,54 +197,8 @@
        <property name="margin">
         <number>24</number>
        </property>
-       <item row="3" column="0">
-        <widget class="QLabel" name="demaisLabel">
-         <property name="text">
-          <string>Demais:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="maxVagasLE"/>
-       </item>
        <item row="1" column="1">
         <widget class="QLineEdit" name="meiaLE"/>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="horaLabel">
-         <property name="text">
-          <string>1 Hora:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="horaLE"/>
-       </item>
-       <item row="1" column="2">
-        <spacer name="horizontalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="3">
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="meiaLabel">
@@ -263,8 +217,51 @@
          </property>
         </widget>
        </item>
+       <item row="1" column="3">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>193</width>
+           <height>25</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="horaLE"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="demaisLabel">
+         <property name="text">
+          <string>Demais:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <spacer name="horizontalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>192</width>
+           <height>25</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="3" column="1">
         <widget class="QLineEdit" name="demaisLE"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="horaLabel">
+         <property name="text">
+          <string>1 Hora:</string>
+         </property>
+        </widget>
        </item>
        <item row="4" column="0">
         <widget class="QLabel" name="diariaLabel">
@@ -275,6 +272,19 @@
        </item>
        <item row="4" column="1">
         <widget class="QLineEdit" name="diariaLE"/>
+       </item>
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="maxVagasLE"/>
+       </item>
+       <item row="5" column="0">
+        <widget class="QLabel" name="mensalLabel">
+         <property name="text">
+          <string>Mensal:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QLineEdit" name="mensalLE"/>
        </item>
       </layout>
      </widget>
@@ -295,6 +305,7 @@
   <tabstop>horaLE</tabstop>
   <tabstop>demaisLE</tabstop>
   <tabstop>diariaLE</tabstop>
+  <tabstop>mensalLE</tabstop>
   <tabstop>salvarButton</tabstop>
   <tabstop>fecharButton</tabstop>
  </tabstops>
